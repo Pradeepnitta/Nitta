@@ -50,9 +50,8 @@ router.get(
   ),
 
   (req, res) => {
-    res.redirect(
-      "https://localhost:5173/dashboard"
-    );
+    const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "https://localhost:5173");
+    res.redirect(`${clientUrl}/dashboard`);
   }
 );
 

@@ -105,7 +105,8 @@ exports.signup = async (req, res) => {
 
         await existingUser.save();
 
-        const verifyLink = `https://localhost:5000/api/auth/verify/${token}`;
+        const baseUrl = `${req.headers["x-forwarded-proto"] || req.protocol}://${req.get("host")}`;
+        const verifyLink = `${baseUrl}/api/auth/verify/${token}`;
 
         await sendOtpMessages({
           email: existingUser.email,
@@ -145,8 +146,8 @@ exports.signup = async (req, res) => {
       emailOtpExpiresAt: new Date(Date.now() + 10 * 60 * 1000)
     });
 
-    const verifyLink =
-      `https://localhost:5000/api/auth/verify/${token}`;
+    const baseUrl = `${req.headers["x-forwarded-proto"] || req.protocol}://${req.get("host")}`;
+    const verifyLink = `${baseUrl}/api/auth/verify/${token}`;
 
     await sendOtpMessages({
       email: user.email,
@@ -314,10 +315,11 @@ exports.resendOtp = async (req, res) => {
 
     await user.save();
 
+    const baseUrl = `${req.headers["x-forwarded-proto"] || req.protocol}://${req.get("host")}`;
     await sendOtpMessages({
       email: user.email,
       emailOtp,
-      verifyLink: `https://localhost:5000/api/auth/verify/${verificationToken}`
+      verifyLink: `${baseUrl}/api/auth/verify/${verificationToken}`
     });
 
     return res.json({
