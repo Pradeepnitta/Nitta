@@ -29,7 +29,8 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
           process.env.GOOGLE_CLIENT_SECRET,
 
         callbackURL:
-          "/api/auth/google/callback"
+          "/api/auth/google/callback",
+        proxy: true
       },
 
       async (
