@@ -32,7 +32,8 @@ const authenticate = async (req, res, next) => {
 
         req.user = user;
         return next();
-    } catch {
+    } catch (error) {
+        console.error("[AUTH ERROR] JWT verification failed:", error.message);
         return res.status(401).json({ message: "Not authenticated" });
     }
 };

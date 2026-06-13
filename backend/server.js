@@ -23,6 +23,12 @@ if (process.env.RENDER) {
 
 app.use((req, res, next) => {
   console.log(`[REQUEST] ${req.method} ${req.url}`);
+  if (req.url.includes("/auth/me")) {
+    console.log(`[AUTH HEADERS]`, req.headers);
+  }
+  res.on("finish", () => {
+    console.log(`[RESPONSE] ${req.method} ${req.url} -> Status ${res.statusCode}`);
+  });
   next();
 });
 

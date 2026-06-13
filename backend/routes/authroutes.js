@@ -94,18 +94,19 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate(
-    "google",
-    {
-      failureRedirect: "/login"
-    }
-  ),
-
-  (req, res) => {
-    const { getToken } = require("../controllers/authcontroller");
-    const token = getToken(req.user);
+  (req, res, next) => {
     const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "https://localhost:5173");
-    res.redirect(`${clientUrl}/dashboard?token=${token}`);
+
+    passport.authenticate("google", { session: false }, (err, user, info) => {
+      if (err || !user) {
+        console.error("[OAUTH ERROR] Google authentication failed:", err || info);
+        return res.redirect(`${clientUrl}/auth?error=oauth_failed`);
+      }
+
+      const { getToken } = require("../controllers/authcontroller");
+      const token = getToken(user);
+      res.redirect(`${clientUrl}/dashboard?token=${token}`);
+    })(req, res, next);
   }
 );
 

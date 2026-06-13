@@ -60,7 +60,11 @@ function Login() {
   }, [isReady, navigate, resolveDashboardPath, user]);
 
   const googleLogin = () => {
-    window.location.href = '/api/auth/google';
+    if (import.meta.env.DEV) {
+      window.location.href = 'https://localhost:5000/api/auth/google';
+    } else {
+      window.location.href = '/api/auth/google';
+    }
   };
 
   const updateSignup = (event) => {
