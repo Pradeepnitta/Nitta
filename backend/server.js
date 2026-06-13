@@ -21,6 +21,11 @@ if (process.env.RENDER) {
   app.set("trust proxy", 1);
 }
 
+app.use((req, res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.url}`);
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
