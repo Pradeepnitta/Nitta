@@ -18,7 +18,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.MOCK_OAUTH !== "true") {
   passport.use(
     new GoogleStrategy(
       {
