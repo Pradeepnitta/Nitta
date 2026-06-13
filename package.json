@@ -7,6 +7,7 @@
     "install-frontend": "npm install --prefix frontend/vite-project",
     "build-frontend": "npm run build --prefix frontend/vite-project",
     "build": "npm run install-backend && npm run install-frontend && npm run build-frontend",
+    "postinstall": "npm run build",
     "start": "npm start --prefix backend"
   }
 }
