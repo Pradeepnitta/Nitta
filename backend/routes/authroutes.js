@@ -31,8 +31,18 @@ router.get(
   verifyEmail
 );
 
+const checkGoogleConfigured = (req, res, next) => {
+  if (!passport._strategies || !passport._strategies.google) {
+    return res.status(501).json({
+      message: "Google Authentication is not configured or disabled on this server."
+    });
+  }
+  next();
+};
+
 router.get(
   "/google",
+  checkGoogleConfigured,
   passport.authenticate(
     "google",
     { scope: ["profile", "email"] }
@@ -41,7 +51,7 @@ router.get(
 
 router.get(
   "/google/callback",
-
+  checkGoogleConfigured,
   passport.authenticate(
     "google",
     {
