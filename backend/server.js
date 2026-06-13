@@ -50,17 +50,26 @@ if (isMongoUri) {
   console.warn("MONGO_URI is missing or invalid; auth requests will fail until MongoDB is configured.");
 }
 
-app.use(
-  session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: process.env.RENDER ? {
-      sameSite: "none",
-      secure: true
-    } : {}
-  })
-);
+const { MongoStore } = require("connect-mongo");
+
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET || "secret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: process.env.RENDER ? {
+    sameSite: "none",
+    secure: true
+  } : {}
+};
+
+if (isMongoUri) {
+  sessionConfig.store = MongoStore.create({
+    mongoUrl: mongoUri,
+    ttl: 14 * 24 * 60 * 60 // 14 days
+  });
+}
+
+app.use(session(sessionConfig));
 
 app.use(passport.initialize());
 app.use(passport.session());
