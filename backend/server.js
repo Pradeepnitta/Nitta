@@ -48,6 +48,45 @@ app.use(passport.session());
 
 app.use("/api/auth", authRoutes);
 
+app.get("/api/debug-files", (req, res) => {
+  const fs = require("fs");
+  const path = require("path");
+  const targetPath = path.join(__dirname, "..");
+  
+  function getDirectoryStructure(dir, depth = 0) {
+    if (depth > 3) return { name: path.basename(dir), type: "dir", children: [] };
+    try {
+      const files = fs.readdirSync(dir);
+      return files.map(file => {
+        const fullPath = path.join(dir, file);
+        const stats = fs.statSync(fullPath);
+        if (stats.isDirectory()) {
+          if (file === "node_modules" || file === ".git") {
+            return { name: file, type: "dir", omitted: true };
+          }
+          return {
+            name: file,
+            type: "dir",
+            children: getDirectoryStructure(fullPath, depth + 1)
+          };
+        } else {
+          return { name: file, type: "file", size: stats.size };
+        }
+      });
+    } catch (err) {
+      return { error: err.message };
+    }
+  }
+
+  const structure = getDirectoryStructure(targetPath);
+  res.json({
+    __dirname,
+    distPath,
+    distExists: fs.existsSync(distPath),
+    structure
+  });
+});
+
 // Serve frontend static assets when compiled in production
 const distPath = path.join(__dirname, "../frontend/vite-project/dist");
 if (fs.existsSync(distPath)) {
