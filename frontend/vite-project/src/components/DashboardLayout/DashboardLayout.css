@@ -1,0 +1,83 @@
+/* Main workspace viewport layout wrapper */
+.dashboard-layout-wrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Sidebar grid container */
+.sidebar-container {
+    height: 100vh;
+    display: flex;
+}
+
+/* Content Panel view structure */
+.dashboard-content-viewport {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100vh;
+    background: transparent;
+}
+
+/* Page body section - scrolling viewport */
+.dashboard-main-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Body content centering and limits */
+.dashboard-page-container {
+    flex: 1;
+    padding: 32px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Mobile Sidebar Drawer styling and triggers */
+.sidebar-backdrop-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 8, 15, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 780;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 920px) {
+    .sidebar-container {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 790;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar-container.mobile-open {
+        transform: translateX(0);
+    }
+
+    /* Force the actual Sidebar element within container to render */
+    .sidebar-container.mobile-open .sidebar {
+        display: flex !important;
+        width: 260px !important;
+    }
+
+    .dashboard-page-container {
+        padding: 20px;
+    }
+}
