@@ -18,6 +18,7 @@ const getToken = (user) =>
     process.env.JWT_SECRET || "dev-secret",
     { expiresIn: "7d" }
   );
+exports.getToken = getToken;
 
 const normalizeUser = (user) => ({
   id: user._id,

@@ -46,25 +46,39 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         let cancelled = false;
 
-        if (storedSession.user) {
-            setIsReady(true);
-            return () => {
-                cancelled = true;
-            };
-        }
-
         const hydrateFromSession = async () => {
+            const queryParams = new URLSearchParams(window.location.search);
+            const urlToken = queryParams.get('token');
+            
+            let currentToken = token;
+            if (urlToken) {
+                currentToken = urlToken;
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            if (!currentToken && !storedSession.user) {
+                setIsReady(true);
+                return;
+            }
+
+            if (storedSession.user && !urlToken) {
+                setIsReady(true);
+                return;
+            }
+
             try {
-                const response = await apiClient.get('/auth/me');
+                const headers = currentToken ? { Authorization: `Bearer ${currentToken}` } : {};
+                const response = await apiClient.get('/auth/me', { headers });
 
                 if (!cancelled && response.data?.user) {
-                    setUser(response.data.user);
-                    setToken(null);
+                    login(response.data.user, currentToken);
                 }
             } catch {
                 if (!cancelled) {
                     setUser(null);
                     setToken(null);
+                    localStorage.removeItem('authUser');
+                    localStorage.removeItem('authToken');
                 }
             } finally {
                 if (!cancelled) {

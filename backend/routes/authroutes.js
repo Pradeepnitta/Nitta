@@ -60,8 +60,10 @@ router.get(
   ),
 
   (req, res) => {
+    const { getToken } = require("../controllers/authcontroller");
+    const token = getToken(req.user);
     const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "https://localhost:5173");
-    res.redirect(`${clientUrl}/dashboard`);
+    res.redirect(`${clientUrl}/dashboard?token=${token}`);
   }
 );
 
