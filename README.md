@@ -2,12 +2,6 @@
 
 Nitta is a modern, secure monorepo application containing a robust Node.js/Express backend and a responsive Vite + React frontend. The application features user and admin authentication dashboards, OTP-based email verification, Google OAuth, and a mock payment sandbox.
 
-## 🌐 Live Deployment
-You can access the live deployed site here:
-**👉 [https://nitta-2.onrender.com](https://nitta-2.onrender.com)**
-
----
-
 ## ✨ Features
 *   **Role-Based Dashboards**: Distinct and secure interfaces for both standard users and administrators.
 *   **Secure Authentication**: Standard sign-in/sign-up backed by JWTs and session storage.
