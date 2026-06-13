@@ -1,0 +1,12 @@
+{
+  "name": "nitta-monorepo",
+  "version": "1.0.0",
+  "description": "Nitta monorepo containing Express backend and Vite React frontend, served under a single link.",
+  "scripts": {
+    "install-backend": "npm install --prefix backend",
+    "install-frontend": "npm install --prefix frontend/vite-project",
+    "build-frontend": "npm run build --prefix frontend/vite-project",
+    "build": "npm run install-backend && npm run install-frontend && npm run build-frontend",
+    "start": "npm start --prefix backend"
+  }
+}

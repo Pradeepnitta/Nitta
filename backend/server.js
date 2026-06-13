@@ -48,9 +48,25 @@ app.use(passport.session());
 
 app.use("/api/auth", authRoutes);
 
-app.get("/", (_, res) => {
-  res.json({ message: "API running" });
-});
+// Serve frontend static assets when compiled in production
+const distPath = path.join(__dirname, "../frontend/vite-project/dist");
+if (fs.existsSync(distPath)) {
+  console.log("[SERVER INFO] Production static client build directory detected. Mounting assets.");
+  app.use(express.static(distPath));
+  
+  // Custom SPA router fallback (skip any relative API routes so they return standard 404s)
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api/")) {
+      return next();
+    }
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+} else {
+  // Local dev mode fallback root
+  app.get("/", (_, res) => {
+    res.json({ message: "API running" });
+  });
+}
 
 app.get("/healthz", (_, res) => {
   res.status(200).send("OK");
