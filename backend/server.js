@@ -52,6 +52,10 @@ app.get("/", (_, res) => {
   res.json({ message: "API running" });
 });
 
+app.get("/healthz", (_, res) => {
+  res.status(200).send("OK");
+});
+
 // Configure and start HTTPS local server
 const keyPath = path.join(__dirname, "key.pem");
 const certPath = path.join(__dirname, "cert.pem");
