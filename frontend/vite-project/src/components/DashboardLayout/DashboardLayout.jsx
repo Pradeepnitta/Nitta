@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
-import Header from '../Header/Header';
+import Header from '../Header/header';
 import Footer from '../Footer/Footer';
 import Search from '../Search/Search';
 import './DashboardLayout.css';
