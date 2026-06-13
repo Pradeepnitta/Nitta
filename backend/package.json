@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node -e \"if(process.env.RENDER){const {execSync}=require('child_process');console.log('Building frontend for Render...');execSync('npm install --prefix ../frontend/vite-project && npm run build --prefix ../frontend/vite-project',{stdio:'inherit'});}\""
   },
   "keywords": [],
   "author": "",
