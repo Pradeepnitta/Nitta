@@ -98,7 +98,7 @@ if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
   
   // Custom SPA router fallback (skip any relative API routes so they return standard 404s)
-  app.get("*", (req, res, next) => {
+  app.get("/{*splat}", (req, res, next) => {
     if (req.path.startsWith("/api/")) {
       return next();
     }
