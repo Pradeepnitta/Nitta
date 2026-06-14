@@ -18,9 +18,6 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-console.log("[PASSPORT DEBUG] Google Strategy Init:");
-console.log("- Client ID:", process.env.GOOGLE_CLIENT_ID);
-console.log("- Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.MOCK_OAUTH !== "true") {
   passport.use(
