@@ -82,11 +82,11 @@ router.get(
       }
 
       const token = getToken(user);
-      const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "https://localhost:5173");
+      const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "http://localhost:5173");
       res.redirect(`${clientUrl}/dashboard?token=${token}`);
     } catch (error) {
       console.error("[OAUTH ERROR] Mock Google Login failed:", error);
-      const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "https://localhost:5173");
+      const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "http://localhost:5173");
       res.redirect(`${clientUrl}/auth?error=mock_login_failed`);
     }
   }
@@ -95,7 +95,7 @@ router.get(
 router.get(
   "/google/callback",
   (req, res, next) => {
-    const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "https://localhost:5173");
+    const clientUrl = process.env.CLIENT_URL || (process.env.RENDER ? "" : "http://localhost:5173");
 
     passport.authenticate("google", { session: false }, (err, user, info) => {
       if (err || !user) {

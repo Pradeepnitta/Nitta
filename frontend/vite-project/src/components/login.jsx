@@ -61,7 +61,7 @@ function Login() {
 
   const googleLogin = () => {
     if (import.meta.env.DEV) {
-      window.location.href = 'https://localhost:5000/api/auth/google';
+      window.location.href = 'http://localhost:5000/api/auth/google';
     } else {
       window.location.href = '/api/auth/google';
     }
