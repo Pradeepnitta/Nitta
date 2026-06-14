@@ -47,33 +47,46 @@ export function AuthProvider({ children }) {
         let cancelled = false;
 
         const hydrateFromSession = async () => {
+            console.log("[AUTH DEBUG] Hydration started");
             const queryParams = new URLSearchParams(window.location.search);
             const urlToken = queryParams.get('token');
             
-            let currentToken = token;
+            let currentToken = token || localStorage.getItem('authToken') || urlToken;
             if (urlToken) {
+                console.log("[AUTH DEBUG] Detected token in URL:", urlToken);
                 currentToken = urlToken;
+                localStorage.setItem('authToken', urlToken);
                 window.history.replaceState({}, document.title, window.location.pathname);
+                console.log("[AUTH DEBUG] Stripped token from URL bar and saved to localStorage");
             }
 
+            console.log("[AUTH DEBUG] currentToken:", currentToken);
+            console.log("[AUTH DEBUG] storedSession.user:", storedSession.user);
+
             if (!currentToken && !storedSession.user) {
+                console.log("[AUTH DEBUG] No token and no stored user. Setting isReady=true and exiting.");
                 setIsReady(true);
                 return;
             }
 
             if (storedSession.user && !urlToken) {
+                console.log("[AUTH DEBUG] Stored user exists and no URL token. Already hydrated. Setting isReady=true and exiting.");
                 setIsReady(true);
                 return;
             }
 
             try {
+                console.log("[AUTH DEBUG] Fetching profile from /auth/me...");
                 const headers = currentToken ? { Authorization: `Bearer ${currentToken}` } : {};
                 const response = await apiClient.get('/auth/me', { headers });
+                console.log("[AUTH DEBUG] Profile fetch succeeded:", response.data);
 
                 if (!cancelled && response.data?.user) {
+                    console.log("[AUTH DEBUG] Logging in user in React context:", response.data.user);
                     login(response.data.user, currentToken);
                 }
-            } catch {
+            } catch (error) {
+                console.error("[AUTH DEBUG] Profile fetch failed:", error);
                 if (!cancelled) {
                     setUser(null);
                     setToken(null);
@@ -82,6 +95,7 @@ export function AuthProvider({ children }) {
                 }
             } finally {
                 if (!cancelled) {
+                    console.log("[AUTH DEBUG] Hydration finished. Setting isReady=true.");
                     setIsReady(true);
                 }
             }
