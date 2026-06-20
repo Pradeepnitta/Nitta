@@ -60,7 +60,7 @@ function Navbar({ currentPath = '/', onNavigate }) {
                 <div className="navbar-actions">
                     <button
                         className="navbar-cta-btn"
-                        onClick={(e) => handleLinkClick('/auth', e)}
+                        onClick={(e) => handleLinkClick('/signin', e)}
                     >
                         Sign In
                     </button>
@@ -107,7 +107,7 @@ function Navbar({ currentPath = '/', onNavigate }) {
                         })}
                         <button
                             className="navbar-mobile-cta"
-                            onClick={(e) => handleLinkClick('/auth', e)}
+                            onClick={(e) => handleLinkClick('/signin', e)}
                         >
                             Sign In
                         </button>

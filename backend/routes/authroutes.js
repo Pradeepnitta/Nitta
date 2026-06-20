@@ -16,8 +16,31 @@ const { authenticate, requireAdmin } = require("../middlewares/auth");
 
 const router = express.Router();
 
-router.post("/signup", signup);
-router.post("/signin", signin);
+// Middleware to enforce admin key when role=admin
+const adminKeyCheck = (req, res, next) => {
+  if (req.body.role === 'admin') {
+    const { adminKey } = req.body;
+    console.log('Admin signup request body (authroutes):', req.body);
+    const providedKey = (adminKey || '').trim();
+    const expectedKey = (process.env.ADMIN_SIGNUP_KEY || '').trim();
+    console.log('Received adminKey:', providedKey);
+    console.log('Expected ADMIN_SIGNUP_KEY:', expectedKey);
+    if (!providedKey || providedKey !== expectedKey) {
+      return res.status(403).json({ message: 'Invalid admin key' });
+    }
+    // Force role to admin
+    req.body.role = 'admin';
+  }
+  next();
+};
+
+router.post("/signup", adminKeyCheck, signup);
+router.post("/signin", (req, res, next) => {
+  if (req.body.role === 'admin') {
+    req.body.role = 'admin';
+  }
+  signin(req, res);
+});
 router.post("/verify-otp", verifyOtp);
 router.post("/resend-otp", resendOtp);
 router.get("/me", authenticate, currentUser);
@@ -57,6 +80,7 @@ router.get(
 
     try {
       let user = await User.findOne({
+        role: "user",
         $or: [
           { googleId: mockGoogleId },
           { email: mockEmail }

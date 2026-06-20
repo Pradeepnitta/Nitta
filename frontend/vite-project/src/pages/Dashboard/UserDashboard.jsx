@@ -43,7 +43,7 @@ function UserDashboard() {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/auth', { replace: true });
+        navigate('/signin', { replace: true });
     };
 
     return (

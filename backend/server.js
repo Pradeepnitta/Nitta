@@ -30,8 +30,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors({
   origin: process.env.CLIENT_URL || "http://localhost:5173",
   credentials: true
@@ -73,6 +73,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/api/auth", authRoutes);
+const userRoutes = require("./routes/userRoutes");
+app.use("/api/user", userRoutes);
+const adminRoutes = require("./routes/adminRoutes");
+app.use("/api/admin", adminRoutes);
+
+const { authenticate } = require("./middlewares/auth");
+const { createOrder, verifyPayment } = require("./controllers/paymentcontroller");
+
+app.post("/api/create-order", authenticate, createOrder);
+app.post("/api/verify-payment", authenticate, verifyPayment);
+
 
 app.get("/api/debug-files", (req, res) => {
   const fs = require("fs");

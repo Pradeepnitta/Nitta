@@ -1,6 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import AdminSignup from './pages/Auth/AdminSignup.jsx'
+import AdminSignin from './pages/Auth/AdminSignin.jsx'
 import './App.css'
-import Login from './components/login.jsx'
+import UserSignup from './pages/Auth/UserSignup.jsx'
+import UserSignin from './pages/Auth/UserSignin.jsx'
 import { useAuth } from './contexts/AuthContext.jsx'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 import AdminDashboard from './pages/Dashboard/AdminDashboard.jsx'
@@ -13,8 +16,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomeRedirect />} />
-        <Route path="/auth" element={<Login />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<UserSignup />} />
+        <Route path="/signin" element={<UserSignin />} />
         <Route
           path="/dashboard"
           element={
@@ -47,7 +50,9 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/auth" replace />} />
+        <Route path="/admin/signup" element={<AdminSignup />} />
+<Route path="/admin/signin" element={<AdminSignin />} />
+<Route path="*" element={<Navigate to="/signin" replace />} />
       </Routes>
     </BrowserRouter>
   )
@@ -67,7 +72,7 @@ function HomeRedirect() {
     );
   }
 
-  return <Navigate to={user ? resolveDashboardPath(user) : '/auth'} replace />;
+  return <Navigate to={user ? resolveDashboardPath(user) : '/signin'} replace />;
 }
 
 export default App

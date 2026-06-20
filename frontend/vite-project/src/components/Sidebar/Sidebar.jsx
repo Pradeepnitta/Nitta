@@ -187,7 +187,7 @@ function Sidebar({ collapsed, setCollapsed, currentPath = '/dashboard', onNaviga
                         )}
                     </div>
                 ) : (
-                    <a href="/auth" className="sidebar-login-prompt" onClick={(e) => handleItemClick('/auth', e)}>
+                    <a href="/signin" className="sidebar-login-prompt" onClick={(e) => handleItemClick('/signin', e)}>
                         <div className="sidebar-item-icon">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />

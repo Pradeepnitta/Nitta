@@ -16,7 +16,8 @@ function ProtectedRoute({ allowedRoles, children }) {
     }
 
     if (!user) {
-        return <Navigate to="/auth" replace />;
+        const redirectPath = window.location.pathname.startsWith('/admin') ? '/admin/signin' : '/signin';
+        return <Navigate to={redirectPath} replace />;
     }
 
     if (Array.isArray(allowedRoles) && !allowedRoles.includes(user.role)) {

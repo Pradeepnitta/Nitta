@@ -82,10 +82,17 @@ exports.signup = async (req, res) => {
         message: "Invalid role"
       });
     }
+    // Admin key verification
+    if (role === "admin") {
+      const { adminKey } = req.body;
+      if (!adminKey || adminKey !== process.env.ADMIN_SIGNUP_KEY) {
+        return res.status(403).json({ message: "Invalid admin key" });
+      }
+    }
 
     const normalizedEmail = email.toLowerCase();
 
-    const existingUser = await User.findOne({ email: normalizedEmail });
+    const existingUser = await User.findOne({ email: normalizedEmail, role });
 
     if (existingUser) {
       if (!existingUser.password) {
@@ -101,8 +108,8 @@ exports.signup = async (req, res) => {
         existingUser.verificationToken = token;
         existingUser.emailOtp = emailOtp;
         existingUser.emailOtpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-        existingUser.isEmailVerified = false;
-        existingUser.isVerified = false;
+        existingUser.isEmailVerified = true;
+        existingUser.isVerified = true;
 
         await existingUser.save();
 
@@ -144,7 +151,9 @@ exports.signup = async (req, res) => {
       role,
       verificationToken: token,
       emailOtp,
-      emailOtpExpiresAt: new Date(Date.now() + 10 * 60 * 1000)
+      emailOtpExpiresAt: new Date(Date.now() + 10 * 60 * 1000),
+      isEmailVerified: true,
+      isVerified: true
     });
 
     const baseUrl = `${req.headers["x-forwarded-proto"] || req.protocol}://${req.get("host")}`;
@@ -165,7 +174,8 @@ exports.signup = async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json(err);
+    console.error("Signup error:", err);
+    res.status(500).json({ message: err.message || "Internal server error", error: err });
   }
 };
 

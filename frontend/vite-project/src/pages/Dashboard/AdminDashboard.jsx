@@ -45,7 +45,7 @@ function AdminDashboard() {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/auth', { replace: true });
+        navigate('/admin/signin', { replace: true });
     };
 
     return (

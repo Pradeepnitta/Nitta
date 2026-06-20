@@ -43,8 +43,9 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.
         try {
           const email = profile.emails[0].value.toLowerCase();
 
-          // Search for user by googleId OR by email
+           // Search for user by googleId OR by email, restricted to role: "user"
           let user = await User.findOne({
+            role: "user",
             $or: [
               { googleId: profile.id },
               { email: email }

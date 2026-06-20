@@ -22,7 +22,7 @@ const readStoredSession = () => {
 
 const resolveDashboardPath = (user) => {
     if (!user) {
-        return '/auth';
+        return '/signin';
     }
 
     return user.role === 'admin' ? '/admin/dashboard' : '/dashboard';

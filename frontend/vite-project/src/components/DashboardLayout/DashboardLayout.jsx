@@ -4,11 +4,13 @@ import Sidebar from '../Sidebar/Sidebar';
 import Header from '../Header/header';
 import Footer from '../Footer/Footer';
 import Search from '../Search/Search';
+import { useAuth } from '../../contexts/AuthContext';
 import './DashboardLayout.css';
 
 function DashboardLayout({ children, title }) {
     const navigate = useNavigate();
     const location = useLocation();
+    const { logout } = useAuth();
     
     // UI Layout state managers
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -23,8 +25,7 @@ function DashboardLayout({ children, title }) {
 
     const handleAction = (action) => {
         if (action === 'logout') {
-            // Logout logic will clear state, we can handle it via the Sidebar profile card or here
-            navigate('/auth');
+            logout();
         } else {
             console.log('Action triggered:', action);
         }
